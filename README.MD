@@ -21,4 +21,4 @@ This project was built with python using tkinter.
   `mainfile.py`
 
 3. On the same machine or another run client.py along with the ip of the machine the server is hosted on
-  `client.py <host ip>`
+  `frontend.py <host ip>`
