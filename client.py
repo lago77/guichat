@@ -29,7 +29,8 @@ def outputting(myclient,sc,output):
     while True:
         newmsg = myclient.recv_msg(sc,b'?')
         newmsge=newmsg.decode('ascii')
-        output.insert(END,(newmsge))
+        newmsgo=newmsge[:len(newmsge)-1]
+        output.insert(END,(newmsgo))
 
     
 if __name__ == '__main__':
