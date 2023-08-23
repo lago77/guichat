@@ -1,5 +1,5 @@
 from server import Server
-from client import Client
+from frontend import Client
 from threading import Thread
 import socket
 

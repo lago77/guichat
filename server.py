@@ -1,10 +1,12 @@
 
 import argparse, socket, time
-
+import threading
 class Server():
     #initializes a server instance and binds it to the host network ip
     def __init__(self, address, port):
         global clientlist
+        global lock 
+        lock= threading.Lock()
         clientlist=[]
         self.listener = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.listener.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -16,7 +18,9 @@ class Server():
     ### passes the listening socket to accept incoming connections and creates a new active socket from a client connection
     def serve(self,listener):
         sock, address = listener.accept()
+        lock.acquire()
         clientlist.append(sock)
+        lock.release()
         print(sock.getsockname())
         print(type(sock.getsockname()))
         print('  Socket name:', sock.getsockname())
@@ -37,15 +41,17 @@ class Server():
         finally:
             for client in clientlist:
                 if sock.getpeername()==client.getpeername():
+                    lock.acquire()
                     clientlist.remove(client)
+                    lock.release()
                     sock.close()
+                    
     ###method to receive communication a peer then to send it back. 
     def comm(self,sock):
         clientmsg = self.recv_msg(sock,b'?')
         sendback = clientmsg.decode('ascii')
         ###iterates through the list of active client connections and sends a message through each client socket but it's own
         for client in clientlist:
-            print("in the for loop")
             print(client.getsockname())
             if sock.getpeername()!=client.getpeername():
                 client.sendall(sendback.encode('ascii'))
