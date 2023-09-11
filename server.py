@@ -7,6 +7,7 @@ class Server():
         global clientlist
         global lock 
         lock= threading.Lock()
+        #keeps track of the clients
         clientlist=[]
         self.listener = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.listener.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
